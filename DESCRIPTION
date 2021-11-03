@@ -15,7 +15,15 @@ URL: https://github.com/scottfjennings/birdnames
 BugReports: https://github.com/scottfjennings/birdnames/issues
 Imports: 
     dplyr,
-    plyr
+    magrittr,
+    plyr,
+    rlang,
+    rvest,
+    stringr,
+    tabulizer,
+    tidyselect,
+    utils,
+    xml2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
