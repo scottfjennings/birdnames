@@ -9,25 +9,31 @@ translate_bird_names(x, from.name, to.name)
 \arguments{
 \item{x}{Character of the bird name you want to change}
 
-\item{from.name}{The bird name format of x. Can be one of c("alpha.code", "common.name", "order", "family", "subfamily", "genus", "species", "species.number")}
+\item{from.name}{The bird name format of x. Can be one of c("alpha.code", "common.name",
+"order", "family", "subfamily", "genus", "species", "species.number")}
 
-\item{to.name}{The desired output bird name format. Can be one of c("alpha.code", "common.name", "order", "family", "subfamily", "genus", "species", "species.number")}
+\item{to.name}{The desired output bird name format. Can be one of c("alpha.code",
+"common.name", "order", "family", "subfamily", "genus", "species", "species.number")}
 }
 \value{
 character
 }
 \description{
-Translate bird names between common name, alpha code, sci name, etc. Can be used to convert a dataframe column or add a new one.
+Translate bird names between common name, alpha code, sci name, etc. Can be used to convert
+a dataframe column or add a new one.
 }
 \details{
-from.name must be the format of x. E.g., if the x object contains alpha codes, then from.name should be "alpha.code".
+from.name must be the format of x. E.g., if the x object contains alpha codes,
+then from.name should be "alpha.code".
 }
 \examples{
 library(dplyr)
 
 bird_data <- data.frame(alpha.code = c("LTDU", "MALL", "GRSC"))
 
-bird_data <- bird_data \%>\% mutate(common.name = translate_bird_names(alpha.code, "alpha.code", "common.name"), scientific.name = translate_bird_names(alpha.code, "alpha.code", "species"))
+bird_data <- bird_data \%>\%
+mutate(common.name = translate_bird_names(alpha.code, "alpha.code", "common.name"),
+scientific.name = translate_bird_names(alpha.code, "alpha.code", "species"))
 
 bird_data
 }
