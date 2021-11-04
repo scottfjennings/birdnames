@@ -14,8 +14,6 @@
 #' @param keep_taxa names of the taxa to want to filter to; can be names of different taxonomic
 #' levels, e.g. c("Charadriiformes", "Falconidae"); can also leave this blank to keep all species
 #'  in data_file but add common names, sci names, other taxonomic info
-#' @param drop_cols which columns from combined_bird_list do you want to remove; default keeps only
-#'  alpha.code, common.name and species
 #'
 #' @details Currently uses as reference a list of species that contains both those species/
 #' taxonomies available in the sources for full_bird_list and some customized species/
@@ -42,8 +40,7 @@
 #'
 #'
 bird_taxa_filter <- function(data_file,
-                             keep_taxa,
-                             drop_cols = c("order", "family", "subfamily", "genus", "species.number")) {
+                             keep_taxa) {
 
  utils::data("combined_bird_list")
 keep_taxa_list <- combined_bird_list %>%
@@ -52,8 +49,7 @@ droplevels()
 
 out_bird_list <- dplyr::inner_join(data_file, keep_taxa_list)
 
-foo <- dplyr::select(out_bird_list, -tidyselect::any_of(drop_cols))
-
+foo <- dplyr::select(out_bird_list, names(data_file))
 return(foo)
 }
 
