@@ -27,12 +27,11 @@ from.name must be the format of x. E.g., if the x object contains alpha codes,
 then from.name should be "alpha.code".
 }
 \examples{
-library(dplyr)
 
 bird_data <- data.frame(alpha.code = c("LTDU", "MALL", "GRSC"))
 
 bird_data <- bird_data \%>\%
-mutate(common.name = translate_bird_names(alpha.code, "alpha.code", "common.name"),
+dplyr::mutate(common.name = translate_bird_names(alpha.code, "alpha.code", "common.name"),
 scientific.name = translate_bird_names(alpha.code, "alpha.code", "species"))
 
 bird_data
