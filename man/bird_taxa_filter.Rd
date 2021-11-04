@@ -6,10 +6,8 @@
 \usage{
 bird_taxa_filter(
   data_file,
-  join_taxa = c("alpha.code", "alpha.code"),
   keep_taxa,
-  drop_cols = c("order", "family", "subfamily", "genus", "species.number"),
-  use_custom_bird_list
+  drop_cols = c("order", "family", "subfamily", "genus", "species.number")
 )
 }
 \arguments{
@@ -17,20 +15,12 @@ bird_taxa_filter(
 identifier, either AOU Alpha Code ("alpha.code"), Numeric Code ("species.number"),
 Common Name ("common.name"), or Scientific Name ("species")}
 
-\item{join_taxa}{2 character string, first character indicates which species identifier is
-common between data file and full_bird_list, second character indicates name of this field
-in data_file}
-
 \item{keep_taxa}{names of the taxa to want to filter to; can be names of different taxonomic
 levels, e.g. c("Charadriiformes", "Falconidae"); can also leave this blank to keep all species
 in data_file but add common names, sci names, other taxonomic info}
 
-\item{drop_cols}{which columns from full_bird_list do you want to remove; default keeps only
+\item{drop_cols}{which columns from combined_bird_list do you want to remove; default keeps only
 alpha.code, common.name and species}
-
-\item{use_custom_bird_list}{optional. If NULL (default), no custom bird names are used. If "yes",
-custom_bird_list provided in package is used. User can also specify a local file path for their
-own custom bird list (must match format of the provided custom_bird_list)}
 }
 \value{
 data frame with all columns in data_file and all columns in full_bird_list except
@@ -40,33 +30,23 @@ those specified in drop_cols
 Filter a list of bird species by taxonomic relationships.
 }
 \details{
-User can supply their own custom bird list for additional filtering beyond the
-information contained in full_bird_list. So far I have encountered two scenarios where
-this is needed:
-\enumerate{
-\item project specific species groups (e.g. Dunlin, Least Sandpiper, Western Sandpiper and
-Sanderling not identified to species are recorded as PEEP.
-\item Subspecies, races, etc for which there are established banding codes and common names
-provided in the IBP and BBL species list but no corresponding taxonomic information in
-the AOU species list. In this case the user may want to manually fill in taxonomic information.
-}
+Currently uses as reference a list of species that contains both those species/
+taxonomies available in the sources for full_bird_list and some customized species/
+taxonomies that are useful for ACR's long term monitoring projects (dataset "combined_bird_list")
+and maybe other projects on waterbirds or shorebirds.
 
-The supplied file must have field names matching full_bird_list, but for species groups
-alpha.code should contain the species group code ("PEEP" from the above example). The file can
-optionally also have the field group.spp, which contains the alpha codes of the species in
-that group, separated by commas (DUNL, LESA, WESA, SAND).
-
-The supplied file can contain rows corresponding to both scenarios above, but rows
-corresponding to scenario 2 should have alpha.code filled for that subspecies/race
-and group.spp set to NA. See the attached custom_bird_list for an example.
+Future versions will allow the user to choose to use full_bird_list, combined_bird_list, or
+supply their own customized list. (I tried implementing this but there is some aspect of
+scoping that I don't understand and I can't get it to work.)
 }
 \examples{
+
  sample_bird_data <- data.frame(alpha.code = c("MALL", "GRSC", "BUFF", "RTHA", "SCAUP",
  "GREG", "HOGR"))
 
- bird_taxa_filter(sample_bird_data, c("alpha.code", "alpha.code"),
- c("Anseriformes", "Podicipediformes"), use_custom_bird_list = "yes")
+ # using publicly available and custom bird names (dataset provided with package)
 
- bird_taxa_filter(sample_bird_data, c("alpha.code", "alpha.code"),
- c("Anseriformes", "Podicipediformes"), use_custom_bird_list = "no")
+ bird_taxa_filter(sample_bird_data, c("Anseriformes", "Podicipediformes"))
+
+
 }
