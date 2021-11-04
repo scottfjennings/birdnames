@@ -1,8 +1,5 @@
 #' Combined bird name list.
 #'
-#' A dataset containing the names and taxonomic information for bird species, subspecies and
-#' species groups that do not exist or do not have complete information in full_bird_list,
-#' and which are useful for Audubon Canyon Ranch's long term bird monitoring projects.
 #' This dataset is simply full_bird_list and custom_bird_list row bound together.
 #' The bird names and taxonomy in this dataset may not be recognised by any official group.
 #' The user can add to or modify this dataset to suit their project, and save the file
