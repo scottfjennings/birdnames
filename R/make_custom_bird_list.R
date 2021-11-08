@@ -25,3 +25,4 @@ custom_bird_list <- rbind(bird_lumpies, manual_species) %>%
   dplyr::mutate(species = ifelse(.data$alpha.code == "TURN", "Arenaria spp.", .data$species))
 return(custom_bird_list)
 }
+
