@@ -6,7 +6,6 @@
 #'
 #' @return data frame matching structure of full_bird_list
 #' @importFrom utils read.csv
-#' @export
 #'
 #' @examples
 #' custom_bird_list <- make_custom_bird_list()
