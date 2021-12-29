@@ -92,7 +92,7 @@ fill_taxonomy <- function(df) {
 add_taxon_order <- function(df){
   df1 <- df %>%
     # add number for each distinct aou$species; this assigns same species-level number to any subspecies
-  left_join(., aou %>%
+  left_join(., df %>%
               select(species) %>%
               mutate(species.num = row_number()) %>% separate(species, c("genus", "specific.name"), extra = "drop")) %>%
     # add genus number for any taxa only IDed to genus
