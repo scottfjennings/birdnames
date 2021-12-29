@@ -22,7 +22,40 @@ You can install the development version of birdnames from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("scottfjennings/birdnames")
+# devtools::install_github("scottfjennings/birdnames")
+```
+
+## Setup
+
+If your dataset contains “species” that don’t exist in bird\_list, you
+can insert your custom species int bird\_list in the taxonomically
+correct location and save the resulting custom\_bird\_list in some
+logical local place. Currently your custom\_species file should have the
+same structure as bird\_list and have as much of the higher taxonomic
+information filled in. If your “species” are species groups
+(e.g. alpha.code = “CORM” or common.name = “Cormorant” for unidentified
+cormorants), then custom\_species can additionally have a field called
+“group.spp” which contains the constituent species alpha.codes as
+appropriate for your study, separated by commas (e.g. group.spp = “DCCO,
+BRAC”). See the included sample “custom\_species” dataset for formatting
+help.
+
+TODO: future versions will allow user to supply custom\_species with
+just three fields, alpha.code, common.name and group.spp, and the higher
+taxonomic info will be filled automatically.
+
+``` r
+library(birdnames)
+library(tidyverse)
+
+data("bird_list")
+
+custom_bird_list <- bird_list %>%
+  bind_rows(., utils::read.csv("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/custom_species.csv")) %>%
+  add_taxon_order()
+
+
+saveRDS(custom_bird_list, "C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/custom_bird_list")
 ```
 
 ## Example workflow using birdnames
@@ -36,12 +69,17 @@ group rather than species (e.g. “SCAUP” for Greater and Lesser Scaup).
 The functions in birdnames can be piped together using magrittr::%\>%;
 in this example we’ll build up a workflow one function at a time.
 
+If you have created a locally-stored custom\_bird\_list, it should be
+read in early in your workflow.
+
 ``` r
 library(birdnames)
 library(tidyverse)
 #> Warning: package 'ggplot2' was built under R version 4.0.5
 #> Warning: package 'tibble' was built under R version 4.0.5
 #> Warning: package 'dplyr' was built under R version 4.0.5
+
+custom_bird_list <- readRDS("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/custom_bird_list")
 
 ## Generate basic example dataset
 waterbird_data <- data.frame(alpha.code = c("OLDS", "LTDU", "MALL", "WTKI", "GRSC", "SCAUP", "GWTE", "COLO", "WEGR"))
@@ -199,15 +237,15 @@ data_with_notes <- data_with_notes %>%
 
 data_with_notes
 #>         date alpha.code                               notes
-#> 1 2021-10-05       COLO cheese and crackers for lunch today
-#> 2 2021-10-05       PBGR                                <NA>
-#> 3 2021-10-05       MALL                  also AMWI and teal
-#> 4 2021-09-05       COLO                                <NA>
-#> 5 2021-09-05       PBGR          chased by peregrine falcon
-#> 6 2021-09-05       MALL                                <NA>
-#> 7 2021-08-06       COLO                                rain
-#> 8 2021-08-06       PBGR                                <NA>
-#> 9 2021-08-06       MALL                                <NA>
+#> 1 2021-11-29       COLO cheese and crackers for lunch today
+#> 2 2021-11-29       PBGR                                <NA>
+#> 3 2021-11-29       MALL                  also AMWI and teal
+#> 4 2021-10-30       COLO                                <NA>
+#> 5 2021-10-30       PBGR          chased by peregrine falcon
+#> 6 2021-10-30       MALL                                <NA>
+#> 7 2021-09-30       COLO                                rain
+#> 8 2021-09-30       PBGR                                <NA>
+#> 9 2021-09-30       MALL                                <NA>
 #>              bird.notes
 #> 1                      
 #> 2                    NA
@@ -219,3 +257,15 @@ data_with_notes
 #> 8                    NA
 #> 9                    NA
 ```
+
+## Updates
+
+29 Dec 2021. Implemented two changes to how the package works:  
+1\. Taxonomic ordering is now down based on the order of the most recent
+AOU list. The taxonomic numbers were discontinued with 7th AOU checklist
+update. Using taxonomic order of AOU list is more future-proof.  
+2\. updated translate\_bird\_names and bird\_taxa\_filter to use a
+locally saved custom\_bird\_list (if such a file has been loaded into
+the Global Env). The custom\_bird\_list with ACR grouped taxa is no
+longer an included dataset, but the small table with these grouped taxa
+only is included as a formatting example.
