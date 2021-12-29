@@ -21,4 +21,4 @@
 #'   alpha.codes, otherwise NA}
 #' }
 #' @source created by hand
-"custom_bird_list"
+"custom_species"
