@@ -17,7 +17,6 @@
 #' @importFrom rvest html_table
 #' @importFrom rvest html_nodes
 #' @importFrom utils read.csv
-#' @export
 #'
 #' @examples
 #' full_bird_list <- make_full_bird_list(from = "web")
