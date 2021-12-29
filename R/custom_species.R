@@ -17,9 +17,8 @@
 #'   \item{subfamily}{The subfamily that the bird species belongs to}
 #'   \item{genus}{The genus that the bird species belongs to}
 #'   \item{species}{The full scientific name (Genus and specific epithet) for the bird species}
-#'   \item{species.number}{The taxonomic number for the bird species (this currenly has many NA)}
 #'   \item{group.spp}{if alpha.code is a species group code, then contains member species
 #'   alpha.codes, otherwise NA}
 #' }
-#' @source make_custom_bird_list.R
+#' @source created by hand
 "custom_bird_list"
