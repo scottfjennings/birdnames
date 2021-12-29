@@ -41,9 +41,13 @@
 #'
 bird_taxa_filter <- function(data_file,
                              keep_taxa) {
+  if(exists("custom_bird_list")) {
+    bird_list = custom_bird_list
+  } else {
+ utils::data("bird_list")
+  }
 
- utils::data("combined_bird_list")
-keep_taxa_list <- combined_bird_list %>%
+keep_taxa_list <- bird_list %>%
   dplyr::filter(dplyr::if_any(dplyr::everything(), ~ .x %in% keep_taxa)) %>%
 droplevels()
 
