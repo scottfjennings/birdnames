@@ -203,9 +203,9 @@ bbl_list <- bbl[1] %>%
 # and download the IBP list from here: https://www.birdpop.org/pages/birdSpeciesCodes.php
 # and save both to C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/
 
-bbl_list <- readRDS("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/bbl_list")
-aou <- read.csv("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/NACC_list_species.csv")
-birdpop_df <- read.csv("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/IBP-AOS-LIST21.csv")
+# bbl_list <- readRDS("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/bbl_list")
+# aou <- read.csv("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/NACC_list_species.csv")
+# birdpop_df <- read.csv("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/IBP-AOS-LIST21.csv")
 
 
-usethis::use_data(bbl_list, aou, birdpop_df, internal = TRUE)
+# usethis::use_data(bbl_list, aou, birdpop_df, internal = TRUE)
