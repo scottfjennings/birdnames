@@ -8,7 +8,7 @@
 #' @importFrom utils read.csv
 #'
 #' @examples
-#' custom_bird_list <- make_custom_bird_list()
+#' #custom_bird_list <- make_custom_bird_list()
 
 make_custom_bird_list <- function(){
       #full_bird_list1 <- read.csv("C:/Users/scott.jennings/Documents/Projects/R_general/utility_functions/utility_function_data/bird_taxa_list.csv") %>% dplyr::select(-taxonomic.order)
