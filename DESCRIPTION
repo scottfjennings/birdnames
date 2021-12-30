@@ -21,6 +21,7 @@ Imports:
     rvest,
     stringr,
     tabulizer,
+    tidyr,
     tidyselect,
     utils,
     xml2
