@@ -8,7 +8,6 @@
 #' The birdpop.org list has alphabetical codes (banding codes) for species, subspecies and some higher taxonomic groups
 #'
 #' @return a .csv
-#' @export
 #'
 #' @examples
 download_birdpop <- function() {
@@ -132,7 +131,6 @@ add_taxon_order <- function(df){
 #' Title
 #'
 #' @return
-#' @export
 #'
 #' @examples
 make_combined_bird_list <- function() {
@@ -180,7 +178,6 @@ new_alphas <- zzz %>%
 #' Title
 #'
 #' @return
-#' @export
 #'
 #' @examples
 #' bbl_list <- scrape_bbl_species_list()
