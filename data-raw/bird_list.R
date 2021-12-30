@@ -1,12 +1,25 @@
 ## code to prepare `bird_list` dataset goes here
 
+# there are several species/subspecies in birdpop_df which do not have matches in aou,
+# but which have congeners in aou.
+# so the logic here is to extract the genera from birdpop_df$species,
+# and peel just the genus and higher fields from aou,
+# then join on genus only
+
+
 library(tidyverse)
+
 
 read_from = "C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/"
 
 custom_bird_list <- readRDS(paste(read_from, "custom_bird_list"))
 
-# data have been downloaded using functions in utilities, read them in.
+# download aou list ----
+#utils::read.csv("http://checklist.aou.org/taxa.csv?type=charset%3Dutf-8%3Bsubspecies%3Dno%3B") %>% write.csv(paste(read_from, "NACC_list_species.csv", sep = ""))
+
+
+
+# data have been downloaded using functions in utilities or line above, read them in.
 birdpop_df <- utils::read.csv(paste(read_from, "IBP-AOS-LIST21.csv", sep = "")) %>%
   dplyr::select(alpha.code = .data$SPEC, common.name = .data$COMMONNAME, species = .data$SCINAME) %>%
   dplyr::mutate(species = gsub("Selaphorus", "Selasphorus", species))
