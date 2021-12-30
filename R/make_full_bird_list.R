@@ -19,7 +19,7 @@
 #' @importFrom utils read.csv
 #'
 #' @examples
-#' full_bird_list <- make_full_bird_list(from = "web")
+#' # full_bird_list <- make_full_bird_list(from = "web")
 #'
 make_full_bird_list <- function(from = c("web"), read_from = NA) {
 # this is mostly a support function for bird_taxa_filter
