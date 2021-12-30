@@ -75,7 +75,7 @@ bbl_list <- bbl[1] %>%
 #' @examples
 extract_genus <- function(df) {
   df <- df %>%
-  separate(species, into = "genus", extra = "drop", remove = FALSE)
+  dplyr::separate(.data$species, into = "genus", extra = "drop", remove = FALSE)
 }
 
 
@@ -90,14 +90,14 @@ extract_genus <- function(df) {
 #' @examples
 separate_species <- function(df) {
   df <- df %>%
-  separate(species, c("genus2", "specific.name", "subspecific.name"), remove = FALSE, extra = "merge") %>%
-  select(-genus2) %>%
-  mutate(specific.name = ifelse(grepl("sp)|sp.)", species), NA, specific.name),
-         subspecific.name = ifelse(grepl("sp)|sp.)", species), NA, subspecific.name),
-         subfamily = ifelse(str_sub(genus, start= -3) == "nae", genus, subfamily),
-         genus = ifelse(str_sub(genus, start= -3) == "nae", NA, genus),
-         family = ifelse(str_sub(genus, start= -3) == "dae", genus, family),
-         genus = ifelse(str_sub(genus, start= -3) == "dae", NA, genus))
+  dplyr::separate(.data$species, c("genus2", "specific.name", "subspecific.name"), remove = FALSE, extra = "merge") %>%
+  dplyr::select(-.data$genus2) %>%
+  dplyr::mutate(.data$specific.name = ifelse(grepl("sp)|sp.)", .data$species), NA, .data$specific.name),
+         .data$subspecific.name = ifelse(grepl("sp)|sp.)", .data$species), NA, .data$subspecific.name),
+         .data$subfamily = ifelse(str_sub(.data$genus, start= -3) == "nae", .data$genus, .data$subfamily),
+         .data$genus = ifelse(str_sub(.data$genus, start= -3) == "nae", NA, .data$genus),
+         .data$family = ifelse(str_sub(.data$genus, start= -3) == "dae", .data$genus, .data$family),
+         .data$genus = ifelse(str_sub(.data$genus, start= -3) == "dae", NA, .data$genus))
 }
 
 
@@ -111,13 +111,13 @@ separate_species <- function(df) {
 #' @examples
 fill_taxonomy <- function(df) {
  df <- df  %>%
-  left_join(., distinct(df, subfamily, family) %>% filter(!is.na(subfamily), subfamily != "", !is.na(family)), by = c("subfamily")) %>%
-  rename(family = family.x) %>%
-  mutate(family = ifelse(is.na(family), family.y, family)) %>%
-  left_join(., distinct(df, family, order) %>% filter(!is.na(family), !is.na(order)), by = c("family")) %>%
-  rename(order = order.x) %>%
-  mutate(order = ifelse(is.na(order), order.y, order)) %>%
-  select(-contains(".y"))
+  dplyr::left_join(., distinct(df, .data$subfamily, .data$family) %>% filter(!is.na(.data$subfamily), .data$subfamily != "", !is.na(.data$family)), by = c("subfamily")) %>%
+  dplyr::rename(family = .data$family.x) %>%
+  dplyr::mutate(.data$family = ifelse(is.na(.data$family), .data$family.y, .data$family)) %>%
+  dplyr::left_join(., distinct(df, .data$family, .data$order) %>% filter(!is.na(.data$family), !is.na(.data$order)), by = c("family")) %>%
+  dplyr::rename(order = .data$order.x) %>%
+  dplyr::mutate(.data$order = ifelse(is.na(.data$order), .data$order.y, .data$order)) %>%
+  dplyr::select(-contains(".y"))
 }
 
 
@@ -137,34 +137,34 @@ fill_taxonomy <- function(df) {
 add_taxon_order <- function(df){
   df1 <- df %>%
     # add number for each distinct aou$species; this assigns same species-level number to any subspecies
-  left_join(., df %>%
-              select(species) %>%
-              mutate(species.num = row_number()) %>% separate(species, c("genus", "specific.name"), extra = "drop")) %>%
+  dplyr::left_join(., df %>%
+              dplyr::select(.data$species) %>%
+              dplyr::mutate(species.num = row_number()) %>% separate(.data$species, c("genus", "specific.name"), extra = "drop")) %>%
     # add genus number for any taxa only IDed to genus
-  full_join(., df %>%
-              distinct(genus) %>%
-              filter(!is.na(genus), genus != "") %>%
-              mutate(genus.num = row_number())) %>%
+  dplyr::full_join(., df %>%
+              dplyr::distinct(.data$genus) %>%
+              dplyr::filter(!is.na(.data$genus), .data$genus != "") %>%
+              dplyr::mutate(genus.num = row_number())) %>%
     # add subfamily number for any taxa only IDed to subfamily
-  full_join(., df %>%
-              distinct(subfamily) %>%
-              filter(!is.na(subfamily), subfamily != "") %>%
-              mutate(subfamily.num = row_number())) %>%
+  dplyr::full_join(., df %>%
+              dplyr::distinct(.data$subfamily) %>%
+              dplyr::filter(!is.na(.data$subfamily), .data$subfamily != "") %>%
+              dplyr::mutate(subfamily.num = row_number())) %>%
     # add family number for any taxa only IDed to family
-  full_join(., df %>%
-              distinct(family) %>%
-              filter(!is.na(family), family != "") %>%
-              mutate(family.num = row_number())) %>%
+  dplyr::full_join(., df %>%
+              dplyr::distinct(.data$family) %>%
+              dplyr::filter(!is.na(.data$family), .data$family != "") %>%
+              dplyr::mutate(family.num = row_number())) %>%
     # add order number for any taxa only IDed to order
-  full_join(., df %>%
-              distinct(order) %>%
-              filter(!is.na(order), order != "") %>%
-              mutate(order.num = row_number()))
+  dplyr::full_join(., df %>%
+              dplyr::distinct(.data$order) %>%
+              dplyr::filter(!is.na(.data$order), .data$order != "") %>%
+              dplyr::mutate(order.num = row_number()))
 
     df2 <- df1 %>%
-    arrange(order.num, family.num, subfamily.num, genus.num, species.num, !is.na(subspecific.name), subspecific.name) %>%
-      mutate(taxonomic.order = row_number()) %>%
-      select(-contains("num"))
+    dplyr::arrange(.data$order.num, .data$family.num, .data$subfamily.num, .data$genus.num, .data$species.num, !is.na(.data$subspecific.name), .data$subspecific.name) %>%
+      dplyr::mutate(taxonomic.order = row_number()) %>%
+      dplyr::select(-contains("num"))
 
 }
 
@@ -187,35 +187,34 @@ make_combined_bird_list <- function() {
   zzz <- dplyr::full_join(full_bird_list, custom_bird_list %>% mutate(species.number = as.numeric(species.number)))
 
   zzz <- zzz %>%
-    group_by(common.name) %>%
-    mutate(num.rec = n()) %>%
-    arrange(-num.rec, common.name)
+    dplyr::group_by(.data$common.name) %>%
+    dplyr::mutate(num.rec = n()) %>%
+    dplyr::arrange(-.data$num.rec, .data$common.name)
 
   bbl_bad_alpha <- zzz %>%
-    filter(num.rec == 2, !common.name %in% c("Antillean Euphonia", "Bewick's Swan", "Black Brant", "Blue-gray Gnatcatcher", "")) %>%
-    mutate(good.bad = ifelse(is.na(species.number), "good", "bad"))
+    dplyr::filter(.data$num.rec == 2, !.data$common.name %in% c("Antillean Euphonia", "Bewick's Swan", "Black Brant", "Blue-gray Gnatcatcher", "")) %>%
+    dplyr::mutate(good.bad = ifelse(is.na(.data$species.number), "good", "bad"))
 
-  formers <- filter(aou, grepl("ormerly placed", annotation)) %>%
-    arrange(common.name) %>%
-    mutate(former.genus = str_extract(annotation, "(?<=genus\\s)\\w+"),
-           former.taxa = str_extract(annotation, "(?<=in\\s)\\w+"),
-           former.taxa = ifelse(former.taxa == "the", NA, former.taxa))
+  formers <- filter(aou, grepl("ormerly placed", .data$annotation)) %>%
+    dplyr::arrange(.data$common.name) %>%
+    dplyr::mutate(former.genus = str_extract(.data$annotation, "(?<=genus\\s)\\w+"),
+           former.taxa = str_extract(.data$annotation, "(?<=in\\s)\\w+"),
+           former.taxa = ifelse(.data$former.taxa == "the", NA, .data$former.taxa))
 
 
 xxx <- formers %>%
-  select(common.name, former.genus, former.taxa) %>%
-  left_join(aou) %>%
-  group_by(common.name) %>%
-  mutate(num.rows = n(),
-           drop.row = former.genus == genus) %>%
-  ungroup() %>%
-  filter(num.rows > 1)
+  dplyr::select(.data$common.name, .data$former.genus, .data$former.taxa) %>%
+  dplyr::left_join(aou) %>%
+  dplyr::group_by(.data$common.name) %>%
+  dplyr::mutate(num.rows = n(),
+           drop.row = .data$former.genus == .data$genus) %>%
+  dplyr::ungroup() %>%
+  dplyr::filter(.data$num.rows > 1)
 
 
 new_alphas <- zzz %>%
-  filter(num.rec > 1) %>%
-  select(alpha.code, species, species.number) %>%
-  mutate(new.alpha = ifelse())
+  dplyr::filter(.data$num.rec > 1) %>%
+  dplyr::select(.data$alpha.code, .data$species, .data$species.number)
 
 
 }
