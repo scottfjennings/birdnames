@@ -22,6 +22,11 @@ birdpop_df <- birdpop2 %>%
 
 }
 
+#' Download AOU species list
+#'
+#' @return
+#'
+#' @examples
 download_aou <- function() {
 
 # from here: http://checklist.aou.org/taxa
@@ -31,6 +36,11 @@ aou <- utils::read.csv("http://checklist.aou.org/taxa.csv?type=charset%3Dutf-8%3
 
 }
 
+#' Download BBL species list
+#'
+#' @return
+#'
+#' @examples
 download_bbl <- function() {
 # bbl list has taxonomic numbers
 # taxonomic numbers appear to be deprecated
@@ -54,12 +64,30 @@ bbl_list <- bbl[1] %>%
 # and peel just the genus and higher fields from aou,
 # then join on genus only
 
+#' Extract genus from a scientific name
+#'
+#' Helper function for merging birdpop and aou lists; not exported.
+#'
+#' @param df
+#'
+#' @return
+#'
+#' @examples
 extract_genus <- function(df) {
   df <- df %>%
   separate(species, into = "genus", extra = "drop", remove = FALSE)
 }
 
 
+#' separate species field
+#'
+#' Separate species field into genus (dropped), specific epithet ("species.name") and subspecies name, if applicable.
+#'
+#' @param df
+#'
+#' @return
+#'
+#' @examples
 separate_species <- function(df) {
   df <- df %>%
   separate(species, c("genus2", "specific.name", "subspecific.name"), remove = FALSE, extra = "merge") %>%
@@ -72,7 +100,15 @@ separate_species <- function(df) {
          genus = ifelse(str_sub(genus, start= -3) == "dae", NA, genus))
 }
 
-# birdpop_df includes some records for birds ID to higher level than genus, but separate_species()
+
+#' Fill in higher taxonomic information
+#' birdpop_df includes some records for birds ID to higher level than genus, but separate_species()
+#'
+#' @param df data frame output from separate_species()
+#'
+#' @return
+#'
+#' @examples
 fill_taxonomy <- function(df) {
  df <- df  %>%
   left_join(., distinct(df, subfamily, family) %>% filter(!is.na(subfamily), subfamily != "", !is.na(family)), by = c("subfamily")) %>%
@@ -88,6 +124,16 @@ fill_taxonomy <- function(df) {
 # want to generate a helper numeric field for taxonomic sorting, based on the order of the current aou list
 # but need to fill in the right numbers for taxa not in aou
 
+#' Add taxonomic ordering number for user's custom_species
+#'
+#' Places user's custom_species in the correct location in bird_list and renumbers the entire list.
+#'
+#' @param df
+#'
+#' @return
+#' @export
+#'
+#' @examples
 add_taxon_order <- function(df){
   df1 <- df %>%
     # add number for each distinct aou$species; this assigns same species-level number to any subspecies
