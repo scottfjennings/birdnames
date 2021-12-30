@@ -16,7 +16,8 @@ translate_bird_names(x, from.name, to.name)
 "common.name", "order", "family", "subfamily", "genus", "species", "species.number")}
 }
 \value{
-character
+character. If there are no matches for x in bird_list$from.name (or custom_bird_list, if specified),
+then returns tolower(x)
 }
 \description{
 Translate bird names between common name, alpha code, sci name, etc. Can be used to convert
@@ -25,6 +26,8 @@ a dataframe column or add a new one.
 \details{
 from.name must be the format of x. E.g., if the x object contains alpha codes,
 then from.name should be "alpha.code".
+
+A custom bird list can be specified as "custom_bird_list" to include user-defined "species" that aren't present in the included "bird_list" dataset. If "custom_bird_list" is not specified, then the included "bird_list" dataset is used as name reference.
 }
 \examples{
 
