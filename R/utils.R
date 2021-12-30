@@ -11,7 +11,8 @@
 #' @export
 #'
 #' @examples
-#' birdpop_df <- birdnames::download_birdpop()
+#' # downloads take a while so commented out for package checking
+#' # download_birdpop()
 download_birdpop <- function() {
 
 birdpop <- tabulizer::extract_tables("https://www.birdpop.org/docs/misc/Alpha_codes_tax.pdf")
@@ -21,6 +22,35 @@ birdpop_df <- birdpop2 %>%
   dplyr::rename(common.name = 2, alpha.code = 3, species = 4) %>%
   dplyr::select(.data$common.name, .data$alpha.code, .data$species) %>%
   dplyr::mutate(alpha.code = gsub("\\*", "", .data$alpha.code))
+
+}
+
+
+
+
+#' Download BBL species list
+#' bbl list has taxonomic numbers, which AOU discontinued in the 7th checklist update.
+#' current version of birdnames does taxonomic ordering based on the AOU list.
+#' bbl list probably not needed but retaining this function for possible future use of bbl list
+#' (e.g. band size or T&E status)
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' # downloads take a while so commented out for package checking
+#' # download_bbl
+download_bbl <- function() {
+
+url <- "https://www.pwrc.usgs.gov/bbl/manual/speclist.cfm"
+bbl <- url %>%
+  xml2::read_html() %>%
+  rvest::html_nodes(xpath='//*[@id="spectbl"]') %>%
+  rvest::html_table()
+bbl_list <- bbl[1] %>%
+  data.frame() %>%
+  dplyr::rename_all(tolower) %>%
+  dplyr::select(.data$alpha.code, .data$common.name, .data$species.number)
 
 }
 
