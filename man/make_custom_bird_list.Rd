@@ -13,5 +13,5 @@ data frame matching structure of full_bird_list
 Helper function to combine bird group dataset and user-filled dataset.
 }
 \examples{
-custom_bird_list <- make_custom_bird_list()
+#custom_bird_list <- make_custom_bird_list()
 }
