@@ -32,8 +32,8 @@ bird_names <- rbind(bird_list %>%
                       dplyr::select(code.name = .data$alpha.code),
                     bird_list %>%
                       dplyr::filter(grepl("nidentified", .data$common.name)) %>%
-                      dplyr::mutate(common.name = gsub("Unidentified", "", common.name)) %>%
-                      dplyr::distinct(common.name) %>%
+                      dplyr::mutate(common.name = gsub("Unidentified", "", .data$common.name)) %>%
+                      dplyr::distinct(.data$common.name) %>%
                       dplyr::rename(code.name = .data$common.name)) %>%
   dplyr::mutate(code.name = tolower(.data$code.name)) %>%
   dplyr::summarise(paste(.data$code.name, collapse = "|"))
