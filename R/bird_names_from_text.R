@@ -43,6 +43,6 @@ out_names <- gsub("c[()]", "", out_names)
 out_names <- gsub("[()]", "", out_names)
 out_names <- gsub(paste(c("character0", '"'), collapse = "|"), "", out_names)
 out_names <- gsub(", ", "_", out_names)
-#return(out_names)
+return(out_names)
 }
 
