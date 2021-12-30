@@ -19,11 +19,18 @@
 bird_names_from_text <- function(x) {
 
 
-bird_names <- rbind(combined_bird_list %>%
+  if(exists("custom_bird_list")) {
+    bird_list = custom_bird_list
+  } else {
+ utils::data("bird_list")
+}
+
+
+bird_names <- rbind(bird_list %>%
                       dplyr::select(code.name = .data$common.name),
-                    combined_bird_list %>%
+                    bird_list %>%
                       dplyr::select(code.name = .data$alpha.code),
-                    combined_bird_list %>%
+                    bird_list %>%
                       dplyr::filter(grepl("nidentified", .data$common.name)) %>%
                       dplyr::mutate(common.name = gsub("Unidentified", "", common.name)) %>%
                       dplyr::distinct(common.name) %>%
@@ -38,6 +45,4 @@ out_names <- gsub(paste(c("character0", '"'), collapse = "|"), "", out_names)
 out_names <- gsub(", ", "_", out_names)
 #return(out_names)
 }
-
-# bird_names_from_text(c("Bald Eagle and White-tailed Kite and WREN are birds.", "The Great Blue Heron is taller than the Snowy Egret"))
 
