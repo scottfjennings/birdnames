@@ -4,11 +4,7 @@
 \alias{bird_taxa_filter}
 \title{bird taxa filter}
 \usage{
-bird_taxa_filter(
-  data_file,
-  keep_taxa,
-  drop_cols = c("order", "family", "subfamily", "genus", "species.number")
-)
+bird_taxa_filter(data_file, keep_taxa)
 }
 \arguments{
 \item{data_file}{your bird data with at least a column containing an allowable species
@@ -18,9 +14,6 @@ Common Name ("common.name"), or Scientific Name ("species")}
 \item{keep_taxa}{names of the taxa to want to filter to; can be names of different taxonomic
 levels, e.g. c("Charadriiformes", "Falconidae"); can also leave this blank to keep all species
 in data_file but add common names, sci names, other taxonomic info}
-
-\item{drop_cols}{which columns from combined_bird_list do you want to remove; default keeps only
-alpha.code, common.name and species}
 }
 \value{
 data frame with all columns in data_file and all columns in full_bird_list except
