@@ -22,6 +22,6 @@ higher taxonomic classifications from http://checklist.aou.org/taxa
 numeric species codes from https://www.pwrc.usgs.gov/bbl/manual/speclist.cfm
 }
 \examples{
-full_bird_list <- make_full_bird_list(from = "web")
+# full_bird_list <- make_full_bird_list(from = "web")
 
 }
