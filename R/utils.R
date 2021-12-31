@@ -148,10 +148,10 @@ fill_taxonomy <- function(df) {
 #' add_taxon_order()
 add_taxon_order <- function(df){
   df1 <- df %>%
-  dplyr::left_join(df %>%
-              dplyr::select(.data$species) %>%
-              dplyr::mutate(species.num = dplyr::row_number()) %>%
-                tidyr::separate(.data$species, c("genus", "specific.name"), extra = "drop")) %>%
+  dplyr::left_join(df  %>%
+                tidyr::separate(.data$species, c("genus", "specific.name"), extra = "drop") %>%
+              dplyr::distinct(.data$genus, .data$specific.name) %>%
+              dplyr::mutate(species.num = dplyr::row_number())) %>%
   dplyr::full_join(df %>%
               dplyr::distinct(.data$genus) %>%
               dplyr::filter(!is.na(.data$genus), .data$genus != "") %>%
@@ -175,7 +175,6 @@ add_taxon_order <- function(df){
       dplyr::select(-dplyr::contains("num"))
 
 }
-
 
 
 
