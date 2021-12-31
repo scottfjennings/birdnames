@@ -13,5 +13,6 @@ a data frame
 The birdpop.org list has alphabetical codes (banding codes) for species, subspecies and some higher taxonomic groups
 }
 \examples{
-birdpop_df <- birdnames::download_birdpop()
+# downloads take a while so commented out for package checking
+# download_birdpop()
 }
