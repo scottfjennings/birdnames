@@ -34,7 +34,7 @@ birdpop_df <- birdpop2 %>%
 #' bbl list probably not needed but retaining this function for possible future use of bbl list
 #' (e.g. band size or T&E status)
 #'
-#' @return
+#' @return data frame
 #' @export
 #'
 #' @examples
