@@ -19,7 +19,6 @@ update_alpha <- function(alpha.code) {
 alpha.code = as.character(alpha.code)
 alpha.code = dplyr::case_when(alpha.code == "REHE" ~ "REDH",
                              alpha.code == "BRCO" ~ "BRAC",
-                             alpha.code == "BRAN" ~ "BLBR",
                              alpha.code == "OLDS" ~ "LTDU",
                              alpha.code == "NOSH" ~ "NSHO",
                              alpha.code == "TEAL" ~ "UNTE",
