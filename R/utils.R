@@ -3,30 +3,6 @@
 
 
 
-#' Download species list from birdpop.org
-#'
-#' The birdpop.org list has alphabetical codes (banding codes) for species, subspecies and some higher taxonomic groups
-#'
-#' @return a data frame
-#' @export
-#'
-#' @examples
-#' # downloads take a while so commented out for package checking
-#' # download_birdpop()
-download_birdpop <- function() {
-
-birdpop <- tabulizer::extract_tables("https://www.birdpop.org/docs/misc/Alpha_codes_tax.pdf")
-birdpop2 <- do.call(rbind, birdpop[-length(birdpop)])
-birdpop_df <- birdpop2 %>%
-  data.frame() %>%
-  dplyr::rename(common.name = 2, alpha.code = 3, species = 4) %>%
-  dplyr::select(.data$common.name, .data$alpha.code, .data$species) %>%
-  dplyr::mutate(alpha.code = gsub("\\*", "", .data$alpha.code))
-
-}
-
-
-
 
 #' Download BBL species list
 #' bbl list has taxonomic numbers, which AOU discontinued in the 7th checklist update.
