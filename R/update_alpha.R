@@ -27,6 +27,9 @@ alpha.code = dplyr::case_when(alpha.code == "REHE" ~ "REDH",
                              alpha.code == "COSN" ~ "WISN",
                              alpha.code == "CAGO" ~ "CANG",
                              alpha.code == "WESJ" ~ "CASJ",
+                             alpha.code == "MEGU" ~ "SBIG",
+                             alpha.code == "HARD" ~ "HADU",
+                             alpha.code == "BAOW" ~ "BANO",
                              TRUE ~ alpha.code)
     return(alpha.code)
 }

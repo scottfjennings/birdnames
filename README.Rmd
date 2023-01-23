@@ -41,11 +41,11 @@ library(tidyverse)
 data("bird_list")
 
 custom_bird_list <- bird_list %>%
-  bind_rows(., utils::read.csv("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/custom_species.csv")) %>%
+  bind_rows(., utils::read.csv("C:/Users/scott.jennings/Documents/Projects/my_R_general/birdnames_support/data/custom_species.csv")) %>%
   add_taxon_order()
 
 
-saveRDS(custom_bird_list, "C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/custom_bird_list")
+saveRDS(custom_bird_list, "C:/Users/scott.jennings/Documents/Projects/my_R_general/birdnames_support/data/custom_bird_list")
 
 
 
@@ -61,7 +61,7 @@ If you have created a locally-stored custom_bird_list, it should be read in earl
 library(birdnames)
 library(tidyverse)
 
-custom_bird_list <- readRDS("C:/Users/scott.jennings/Documents/Projects/birdnames_support/data/custom_bird_list")
+custom_bird_list <- readRDS("C:/Users/scott.jennings/Documents/Projects/my_R_general/birdnames_support/data/custom_bird_list")
 
 ## Generate basic example dataset
 waterbird_data <- data.frame(alpha.code = c("OLDS", "LTDU", "MALL", "WTKI", "GRSC", "SCAUP", "GWTE", "COLO", "WEGR"))
@@ -76,9 +76,9 @@ waterbird_data %>%
 ```
 
 
-Next you may want to filter to just the waterbird species (remove White-tailed Kite). bird_taxa_filter combines the tasks of joining the user's dataset to a table with full taxonomic information then filtering based on those taxonomies. The function relies on a reference list of species composed of both the available bird taxonomy compiled in full_bird_list, plus those species, subspecies and species groups that do not exist or do not have complete information in full_bird_list (these additional "custom" species are contained in custom_bird_list). Using combined_bird_list allows proper handling of species groups like "SCAUP".
+Next you may want to filter to just the waterbird species (remove White-tailed Kite). bird_taxa_filter combines the tasks of joining the user's dataset to a table with full taxonomic information then filtering based on those taxonomies. The function relies on a reference list of species composed of both the available bird taxonomy compiled in bird_list, plus those species, subspecies and species groups that do not exist or do not have complete information in bird_list (these additional "custom" species are contained in custom_bird_list). Using combined_bird_list allows proper handling of species groups like "SCAUP".
 
-Note:  Future versions will hopefully allow the user to choose to use full_bird_list, combined_bird_list, or supply their own customized list. I have tried implementing this but there is some aspect of scoping that I don't understand and I can't get it to work.
+Note:  Future versions will hopefully allow the user to choose to use bird_list, combined_bird_list, or supply their own customized list. I have tried implementing this but there is some aspect of scoping that I don't understand and I can't get it to work.
  
 ```{r}
 waterbird_data %>% 
@@ -98,17 +98,17 @@ waterbird_data %>%
          scientific.name = translate_bird_names(alpha.code, "alpha.code", "species"))
 ```
 
-The provided dataset full_bird_list can be passed to bird_taxa_filter to generate a list of all species meeting a particular taxonomic criteria (i.e. not just those species in the user's own dataset). The user may also want to include species taxonomic number ("species.number") to allow taxonomic sorting of their bird list.
+The provided dataset bird_list can be passed to bird_taxa_filter to generate a list of all species meeting a particular taxonomic criteria (i.e. not just those species in the user's own dataset). The user may also want to include species taxonomic order ("taxonomic.order") to allow taxonomic sorting of their bird list.
 
 ```{r}
-data("full_bird_list")
-ducks <- full_bird_list %>% 
+data("bird_list")
+ducks <- bird_list %>% 
   select(alpha.code) %>% 
   bird_taxa_filter(keep_taxa = "Anseriformes") %>% 
   mutate(common.name = translate_bird_names(alpha.code, "alpha.code", "common.name"),
          scientific.name = translate_bird_names(alpha.code, "alpha.code", "species"),
-         species.number = translate_bird_names(alpha.code, "alpha.code", "species.number")) %>% 
-  arrange(species.number)
+         taxonomic.order = translate_bird_names(alpha.code, "alpha.code", "taxonomic.order")) %>% 
+  arrange(taxonomic.order)
 head(ducks)
 
 ``` 
@@ -116,7 +116,7 @@ head(ducks)
 
 bird_taxa_filer also allows filtering at multiple taxonomic levels. For example, you might wish to isolate data for all waterbirds in the orders Anseriformes, Gaviiformes and Podicepiformes, and also the raptor species in the genera Falco and Accipiter.
 ```{r}
-waterbirds_faclons_accipiters <- full_bird_list %>% 
+waterbirds_faclons_accipiters <- bird_list %>% 
   select(alpha.code) %>% 
   bird_taxa_filter(keep_taxa = c("Anseriformes", "Gaviiformes", "Podicepiformes", "Falco", "Accipiter")) %>% 
   mutate(common.name = translate_bird_names(alpha.code, "alpha.code", "common.name"),
@@ -124,7 +124,7 @@ waterbirds_faclons_accipiters <- full_bird_list %>%
          order = translate_bird_names(alpha.code, "alpha.code", "order"),
          family = translate_bird_names(alpha.code, "alpha.code", "family"),
          genus = translate_bird_names(alpha.code, "alpha.code", "genus"),
-         species.number = translate_bird_names(alpha.code, "alpha.code", "species.number")) %>% view()
+         taxonomic.order = translate_bird_names(alpha.code, "alpha.code", "taxonomic.order")) %>% view()
 ```
 
 
