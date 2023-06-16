@@ -9,6 +9,8 @@
 #' @return data frame matching structure of full_bird_list
 #' @importFrom utils read.csv
 #'
+#' @export
+#'
 #' @examples
 #' custom_bird_list <- make_custom_bird_list("C:/Users/scott.jennings/OneDrive - Audubon Canyon Ranch/Projects/my_R_general/birdnames_support/data/custom_species.csv")
 #' saveRDS(custom_bird_list, "C:/Users/scott.jennings/OneDrive - Audubon Canyon Ranch/Projects/my_R_general/birdnames_support/data/custom_bird_list")
