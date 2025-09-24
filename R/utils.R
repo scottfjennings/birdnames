@@ -26,7 +26,7 @@ bbl <- url %>%
 bbl_list <- bbl[1] %>%
   data.frame() %>%
   dplyr::rename_all(tolower) %>%
-  dplyr::select(.data$alpha.code, .data$common.name, .data$species.number)
+  dplyr::select(alpha.code, common.name, species.number)
 
 }
 
@@ -44,7 +44,7 @@ bbl_list <- bbl[1] %>%
 #'
 extract_genus <- function(df) {
   df <- df %>%
-  tidyr::separate(.data$species, into = "genus", extra = "drop", remove = FALSE)
+  tidyr::separate(species, into = "genus", extra = "drop", remove = FALSE)
 }
 
 
@@ -62,14 +62,14 @@ extract_genus <- function(df) {
 #'
 separate_species <- function(df) {
   df <- df %>%
-  tidyr::separate(.data$species, c("genus2", "specific.name", "subspecific.name"), remove = FALSE, extra = "merge") %>%
-  dplyr::select(-.data$genus2) %>%
-  dplyr::mutate(specific.name = ifelse(grepl("sp)|sp.)", .data$species), NA, .data$specific.name),
-         subspecific.name = ifelse(grepl("sp)|sp.)", .data$species), NA, .data$subspecific.name),
-         subfamily = ifelse(stringr::str_sub(.data$genus, start= -3) == "nae", .data$genus, .data$subfamily),
-         genus = ifelse(stringr::str_sub(.data$genus, start= -3) == "nae", NA, .data$genus),
-         family = ifelse(stringr::str_sub(.data$genus, start= -3) == "dae", .data$genus, .data$family),
-         genus = ifelse(stringr::str_sub(.data$genus, start= -3) == "dae", NA, .data$genus))
+  tidyr::separate(species, c("genus2", "specific.name", "subspecific.name"), remove = FALSE, extra = "merge") %>%
+  dplyr::select(-genus2) %>%
+  dplyr::mutate(specific.name = ifelse(grepl("sp)|sp.)", species), NA, specific.name),
+         subspecific.name = ifelse(grepl("sp)|sp.)", species), NA, subspecific.name),
+         subfamily = ifelse(stringr::str_sub(genus, start= -3) == "nae", genus, subfamily),
+         genus = ifelse(stringr::str_sub(genus, start= -3) == "nae", NA, genus),
+         family = ifelse(stringr::str_sub(genus, start= -3) == "dae", genus, family),
+         genus = ifelse(stringr::str_sub(genus, start= -3) == "dae", NA, genus))
 }
 
 
@@ -85,14 +85,14 @@ separate_species <- function(df) {
 #'
 fill_taxonomy <- function(df) {
  df <- df  %>%
-  dplyr::left_join(dplyr::distinct(df, .data$subfamily, .data$family) %>%
-                     dplyr::filter(!is.na(.data$subfamily), .data$subfamily != "", !is.na(.data$family)), by = c("subfamily")) %>%
-  dplyr::rename(family = .data$family.x) %>%
-  dplyr::mutate(family = ifelse(is.na(.data$family), .data$family.y, .data$family)) %>%
-  dplyr::left_join(dplyr::distinct(df, .data$family, .data$order) %>%
-                     dplyr::filter(!is.na(.data$family), !is.na(.data$order)), by = c("family")) %>%
-  dplyr::rename(order = .data$order.x) %>%
-  dplyr::mutate(order = ifelse(is.na(.data$order), .data$order.y, .data$order)) %>%
+  dplyr::left_join(dplyr::distinct(df, subfamily, family) %>%
+                     dplyr::filter(!is.na(subfamily), subfamily != "", !is.na(family)), by = c("subfamily")) %>%
+  dplyr::rename(family = family.x) %>%
+  dplyr::mutate(family = ifelse(is.na(family), family.y, family)) %>%
+  dplyr::left_join(dplyr::distinct(df, family, order) %>%
+                     dplyr::filter(!is.na(family), !is.na(order)), by = c("family")) %>%
+  dplyr::rename(order = order.x) %>%
+  dplyr::mutate(order = ifelse(is.na(order), order.y, order)) %>%
   dplyr::select(-dplyr::contains(".y"))
 }
 
@@ -125,28 +125,28 @@ fill_taxonomy <- function(df) {
 add_taxon_order <- function(df){
   df1 <- df %>%
   dplyr::left_join(df  %>%
-                tidyr::separate(.data$species, c("genus", "specific.name"), extra = "drop") %>%
-              dplyr::distinct(.data$genus, .data$specific.name) %>%
+                tidyr::separate(species, c("genus", "specific.name"), extra = "drop") %>%
+              dplyr::distinct(genus, specific.name) %>%
               dplyr::mutate(species.num = dplyr::row_number())) %>%
   dplyr::full_join(df %>%
-              dplyr::distinct(.data$genus) %>%
-              dplyr::filter(!is.na(.data$genus), .data$genus != "") %>%
+              dplyr::distinct(genus) %>%
+              dplyr::filter(!is.na(genus), genus != "") %>%
               dplyr::mutate(genus.num = dplyr::row_number())) %>%
   dplyr::full_join(df %>%
-              dplyr::distinct(.data$subfamily) %>%
-              dplyr::filter(!is.na(.data$subfamily), .data$subfamily != "") %>%
+              dplyr::distinct(subfamily) %>%
+              dplyr::filter(!is.na(subfamily), subfamily != "") %>%
               dplyr::mutate(subfamily.num = dplyr::row_number())) %>%
   dplyr::full_join(df %>%
-              dplyr::distinct(.data$family) %>%
-              dplyr::filter(!is.na(.data$family), .data$family != "") %>%
+              dplyr::distinct(family) %>%
+              dplyr::filter(!is.na(family), family != "") %>%
               dplyr::mutate(family.num = dplyr::row_number())) %>%
   dplyr::full_join(df %>%
-              dplyr::distinct(.data$order) %>%
-              dplyr::filter(!is.na(.data$order), .data$order != "") %>%
+              dplyr::distinct(order) %>%
+              dplyr::filter(!is.na(order), order != "") %>%
               dplyr::mutate(order.num = dplyr::row_number()))
 
     df2 <- df1 %>%
-    dplyr::arrange(.data$order.num, .data$family.num, .data$subfamily.num, .data$genus.num, .data$species.num, !is.na(.data$subspecific.name), .data$subspecific.name) %>%
+    dplyr::arrange(order.num, family.num, subfamily.num, genus.num, species.num, !is.na(subspecific.name), subspecific.name) %>%
       dplyr::mutate(taxonomic.order = dplyr::row_number()) %>%
       dplyr::select(-dplyr::contains("num"))
 
