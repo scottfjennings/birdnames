@@ -1,8 +1,8 @@
 #' Taxonomic list of North American bird species.
 #'
-#' Last update: Jan 23, 2023
+#' Last update: Sept 24, 2025
 #'
-#' A dataset containing the names and taxonomic information for 2191 species and subspecies of birds found in North America. The dataset contains information from three datasets available online:
+#' A dataset containing the names and taxonomic information for 2353 species and subspecies of birds found in North America. The dataset contains information from two datasets available online:
 #' https://www.birdpop.org/docs/misc/Alpha_codes_tax.pdf has 4-letter (banding) codes
 #' http://checklist.aou.org/taxa has higher taxonomic classifications
 #' These datasets are combined using the workflow in data-raw/bird_list.R
