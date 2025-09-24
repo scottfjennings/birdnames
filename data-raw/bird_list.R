@@ -8,8 +8,11 @@
 
 
 library(tidyverse)
+library(here)
 
-read_from = "C:/Users/scott.jennings/Documents/Projects/my_R_general/birdnames_support/data/"
+source(here("R/utils.R"))
+
+read_from = "C:/Users/scott.jennings/OneDrive - Audubon Canyon Ranch/Projects/my_R_general/birdnames_support/data/"
 
 custom_bird_list <- readRDS(paste(read_from, "custom_bird_list", sep = ""))
 
@@ -17,10 +20,9 @@ custom_bird_list <- readRDS(paste(read_from, "custom_bird_list", sep = ""))
 #utils::read.csv("http://checklist.aou.org/taxa.csv?type=charset%3Dutf-8%3Bsubspecies%3Dno%3B") %>% write.csv(paste(read_from, "NACC_list_species.csv", sep = ""))
 
 
-
 # data have been downloaded using functions in utilities or line above, read them in.
-birdpop_df <- utils::read.csv(paste(read_from, "IBP-AOS-LIST22.csv", sep = "")) %>%
-  dplyr::select(alpha.code = .data$SPEC, common.name = .data$COMMONNAME, species = .data$SCINAME) %>%
+birdpop_df <- utils::read.csv(paste(read_from, "IBP-AOS-list25.csv", sep = "")) %>%
+  dplyr::select(alpha.code = SPEC, common.name = COMMONNAME, species = SCINAME) %>%
   dplyr::mutate(species = gsub("Selaphorus", "Selasphorus", species))
 
 aou <- utils::read.csv(paste(read_from, "NACC_list_species.csv", sep = "")) %>%
